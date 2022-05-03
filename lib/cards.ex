@@ -57,7 +57,7 @@ defmodule Cards do
 
   """
   def deal(deck, hand_size) do
-    Enum.split(deck, hand_size) 
+    Enum.split(deck, hand_size)
   end
 
   @doc """
@@ -72,4 +72,36 @@ defmodule Cards do
   def contains?(deck, card) do
     Enum.member?(deck, card)
   end
+
+  @doc """
+  Save deck into file.
+
+  ## Examples
+
+      iex> Cards.save(deck, "mi_baraja.txt")
+      :ok    
+
+  """
+  def save(deck, filename) do
+    binary = :erlang.term_to_binary(deck)
+    File.write(filename, binary)
+  end
+
+  @doc """
+  Load deck from file.
+
+  ## Examples
+
+      iex> Cards.contains?(deck, "Ace of Spades")
+      true    
+
+  """
+  def load(filename) do
+    {status, binary} = File.read(filename)
+
+    case status do
+      :ok -> :erlang.binary_to_term binary
+      :error -> "That file does not exist"  
+    end
+  end 
 end
